@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="DOZ - COMPONENT">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>DOZ - COMPONENT</title>
+    <script src="https://unpkg.com/doz/dist/doz.js"></script>
+    <script src="bundle.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+
+    new Doz({
+        root: '#app',
+        props:{
+            items : [
+                {key: 0, value: "zero"},
+                {key: 1, value: "one"},
+                {key: 2, value: "two"},
+                {key: 3, value: "three"}
+            ]
+        },
+        template(h) {
+            return h`
+                <doz-combo d:store="boundList"/>
+            `
+        },
+
+        onMountAsync(){
+            const combo = this.getStore('boundList');
+            combo.items = this.props.items;
+        }
+    });
+
+</script>
+</body>
+</html>
