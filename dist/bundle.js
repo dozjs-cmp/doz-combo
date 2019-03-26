@@ -1,13 +1,13 @@
-// [YourComponent]  Build version: 0.0.0  
+// [DozCombo]  Build version: 0.1.2  
  (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("doz"));
 	else if(typeof define === 'function' && define.amd)
-		define("YourComponent", ["doz"], factory);
+		define("DozCombo", ["doz"], factory);
 	else if(typeof exports === 'object')
-		exports["YourComponent"] = factory(require("doz"));
+		exports["DozCombo"] = factory(require("doz"));
 	else
-		root["YourComponent"] = factory(root["Doz"]);
+		root["DozCombo"] = factory(root["Doz"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE__0__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -147,8 +147,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n                        <div>hello</div>\n                    '], ['\n                        <div>hello</div>\n                    ']),
-    _templateObject2 = _taggedTemplateLiteral(['\n\n            <style> \n                button {\n                    font-size: 24px;\n                    padding: 20px;\n                }\n            </style>\n            \n            <button \n                onclick="this.clickMe()">\n                hello ', '\n            </button>\n            <my-c/>\n        '], ['\n\n            <style> \n                button {\n                    font-size: 24px;\n                    padding: 20px;\n                }\n            </style>\n            \n            <button \n                onclick="this.clickMe()">\n                hello ', '\n            </button>\n            <my-c/>\n        ']);
+var _templateObject = _taggedTemplateLiteral(['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: block;\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="input-text"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        '], ['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: block;\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="input-text"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        ']);
 
 var _doz = __webpack_require__(0);
 
@@ -169,15 +168,9 @@ var _class = function (_Component) {
         var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, o));
 
         _this.props = {
-            name: 'DOZ'
-        };
-
-        _this.config = {
-            components: {
-                'my-c': function myC(h) {
-                    return h(_templateObject);
-                }
-            }
+            items: [],
+            search: '',
+            value: ''
         };
         return _this;
     }
@@ -185,25 +178,23 @@ var _class = function (_Component) {
     _createClass(_class, [{
         key: 'template',
         value: function template(h) {
-            return h(_templateObject2, this.props.name);
+            var _this2 = this;
+
+            return h(_templateObject, this.each(this.props.items, function (item) {
+                return _this2.props.search && item && item.value.indexOf(_this2.props.search) !== -1 ? '<li onclick="this.onClick()">' + item.value + '</li>' : '';
+            }));
         }
     }, {
-        key: 'clickMe',
-        value: function clickMe() {
-            alert('Ciao!');
+        key: 'onInput',
+        value: function onInput(e) {
+            this.props.search = e.target.value;
         }
     }, {
-        key: 'onCreate',
-        value: function onCreate() {}
-    }, {
-        key: 'onMount',
-        value: function onMount() {}
-    }, {
-        key: 'onUpdate',
-        value: function onUpdate() {}
-    }, {
-        key: 'onDestroy',
-        value: function onDestroy() {}
+        key: 'onClick',
+        value: function onClick(e) {
+            console.log(e.target.outerText);
+            this.props.value = e.target.outerText;
+        }
     }]);
 
     return _class;
