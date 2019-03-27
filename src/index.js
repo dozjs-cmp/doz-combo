@@ -8,7 +8,12 @@ export default class extends Component{
         this.props = {
             items: [],
             search: '',
-            value: ''
+            value: '',
+            listDisplay: 'block',
+            placeholder: '',
+            inputClassCss: 'input-text',
+            isFocus: false,
+            selected: false
         }
     }
 
@@ -21,7 +26,7 @@ export default class extends Component{
                     margin: 0;
                     padding: 0;
                     position: relative;
-                    display: block;
+                    display: ${this.props.listDisplay};
                     z-index: 1;
                 }
                 .list > li{
@@ -43,14 +48,18 @@ export default class extends Component{
             <input 
                 type="text" 
                 oninput="this.onInput()"
+                onfocus="this.onFocus()"
+                onkeypress="this.onInputKeyPress()"
+                onkeydown="this.onInputKeyDown()"
                 d-ref="input"
                 size="1"
                 d-bind="value"
-                class="input-text"
+                class="${this.props.inputClassCss}"
+                placeholder="${this.props.placeholder}"
             >
             <ul class="list">
-                ${this.each(this.props.items, item => 
-                    this.props.search && item &&
+                ${this.each(this.props.items, item =>
+                (this.props.search || this.props.isFocus) && item &&
                     item.value.indexOf(this.props.search) !== -1 ? `<li onclick="this.onClick()">${item.value}</li>` : ''
                 )}
             </ul>
@@ -58,12 +67,33 @@ export default class extends Component{
     }
 
     onInput(e) {
+        this.props.listDisplay = 'block';
         this.props.search = e.target.value;
     }
 
-    onClick(e) {
-        console.log(e.target.outerText)
-        this.props.value = e.target.outerText
+    onFocus(){
+        this.props.isFocus = true;
+        this.props.listDisplay = 'block';
+    }
+
+    onClick(e){
+        console.log(e.target.outerText);
+        this.props.value = e.target.outerText;
+        this.props.listDisplay = 'none';
+        this.emit('select');
+    }
+
+    onInputKeyPress(e){
+        if (e.keyCode === 13) { //press invio
+            this.props.onFocus = false;
+            this.props.listDisplay = 'none';
+        }
+    }
+
+    onInputKeyDown(e) {
+        if(e.keyCode === 8 && e.target.value.length === 0) {
+            this.props.selected.pop();
+        }
     }
 
 };

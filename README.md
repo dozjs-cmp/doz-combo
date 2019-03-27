@@ -6,7 +6,7 @@ Combo list component for DOZ
 npm install --save doz-combo
 ```
 
-Live <a href="https://dozjs-cmp.github.io/doz-combo/dist/">here</a>
+Live <a href="https://dozjs-cmp.github.io/doz-combo/dist/index.html">here</a>
 
 ## Usage
 
