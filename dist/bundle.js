@@ -147,7 +147,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _templateObject = _taggedTemplateLiteral(['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: block;\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="input-text"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        '], ['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: block;\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="input-text"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        ']);
+var _templateObject = _taggedTemplateLiteral(['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: ', ';\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                onfocus="this.onFocus()"\n                onkeypress="this.onInputKeyPress()"\n                onkeydown="this.onInputKeyDown()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="', '"\n                placeholder="', '"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        '], ['\n            <style> \n                .list {\n                    list-style-type: none;\n                    text-align: left;\n                    margin: 0;\n                    padding: 0;\n                    position: relative;\n                    display: ', ';\n                    z-index: 1;\n                }\n                .list > li{\n                    box-sizing: border-box;\n                    padding: 10px;\n                    background: #eee;\n                    color: black;\n                    margin-bottom: 1px;\n                    display: block;\n                }\n                .list > li:hover{\n                    background-color: darkgrey;\n                }\n                .input-text{\n                    width: 200px;\n                    padding: 5px;\n                }\n            </style>\n            <input \n                type="text" \n                oninput="this.onInput()"\n                onfocus="this.onFocus()"\n                onkeypress="this.onInputKeyPress()"\n                onkeydown="this.onInputKeyDown()"\n                d-ref="input"\n                size="1"\n                d-bind="value"\n                class="', '"\n                placeholder="', '"\n            >\n            <ul class="list">\n                ', '\n            </ul>\n        ']),
+    _templateObject2 = _taggedTemplateLiteral(['<li forceupdate onclick="', '">', '</li>'], ['<li forceupdate onclick="', '">', '</li>']),
+    _templateObject3 = _taggedTemplateLiteral(['<li style="display: none"></li>'], ['<li style="display: none"></li>']);
 
 var _doz = __webpack_require__(0);
 
@@ -170,7 +172,12 @@ var _class = function (_Component) {
         _this.props = {
             items: [],
             search: '',
-            value: ''
+            value: '',
+            listDisplay: 'block',
+            placeholder: '',
+            inputClassCss: 'input-text',
+            isFocus: false
+            //selected: false
         };
         return _this;
     }
@@ -180,20 +187,57 @@ var _class = function (_Component) {
         value: function template(h) {
             var _this2 = this;
 
-            return h(_templateObject, this.each(this.props.items, function (item) {
-                return _this2.props.search && item && item.value.indexOf(_this2.props.search) !== -1 ? '<li onclick="this.onClick()">' + item.value + '</li>' : '';
+            return h(_templateObject, this.props.listDisplay, this.props.inputClassCss, this.props.placeholder, this.each(this.props.items, function (item) {
+                return (_this2.props.search || _this2.props.isFocus) && item && item.value.indexOf(_this2.props.search) !== -1 ? _this2.h(_templateObject2, function (e) {
+                    return _this2.onClick(item, e);
+                }, item.value) : _this2.h(_templateObject3);
             }));
+        }
+    }, {
+        key: 'onMount',
+        value: function onMount() {
+            var _this3 = this;
+
+            document.body.addEventListener('click', function (e) {
+                if (e.target !== _this3.ref.input) {
+                    _this3.props.listDisplay = 'none';
+                }
+            });
         }
     }, {
         key: 'onInput',
         value: function onInput(e) {
+            this.props.listDisplay = 'block';
             this.props.search = e.target.value;
         }
     }, {
+        key: 'onFocus',
+        value: function onFocus() {
+            this.props.isFocus = true;
+            this.props.listDisplay = 'block';
+        }
+    }, {
         key: 'onClick',
-        value: function onClick(e) {
-            console.log(e.target.outerText);
+        value: function onClick(item, e) {
             this.props.value = e.target.outerText;
+            this.props.listDisplay = 'none';
+            this.emit('select', item);
+        }
+    }, {
+        key: 'onInputKeyPress',
+        value: function onInputKeyPress(e) {
+            if (e.keyCode === 13) {
+                //press invio
+                this.props.onFocus = false;
+                this.props.listDisplay = 'none';
+            }
+        }
+    }, {
+        key: 'onInputKeyDown',
+        value: function onInputKeyDown(e) {
+            if (e.keyCode === 8 && e.target.value.length === 0) {
+                //this.props.selected.pop();
+            }
         }
     }]);
 

@@ -13,7 +13,7 @@ export default class extends Component{
             placeholder: '',
             inputClassCss: 'input-text',
             isFocus: false,
-            selected: false
+            //selected: false
         }
     }
 
@@ -60,10 +60,20 @@ export default class extends Component{
             <ul class="list">
                 ${this.each(this.props.items, item =>
                 (this.props.search || this.props.isFocus) && item &&
-                    item.value.indexOf(this.props.search) !== -1 ? `<li onclick="this.onClick()">${item.value}</li>` : ''
+                    item.value.indexOf(this.props.search) !== -1 
+                    ? this.h`<li forceupdate onclick="${(e) => this.onClick(item, e)}">${item.value}</li>` 
+                    : this.h`<li style="display: none"></li>`
                 )}
             </ul>
         `
+    }
+
+    onMount() {
+        document.body.addEventListener('click', (e) => {
+            if (e.target !== this.ref.input) {
+                this.props.listDisplay = 'none';
+            }
+        });
     }
 
     onInput(e) {
@@ -76,11 +86,10 @@ export default class extends Component{
         this.props.listDisplay = 'block';
     }
 
-    onClick(e){
-        console.log(e.target.outerText);
+    onClick(item, e){
         this.props.value = e.target.outerText;
         this.props.listDisplay = 'none';
-        this.emit('select');
+        this.emit('select', item);
     }
 
     onInputKeyPress(e){
@@ -92,7 +101,7 @@ export default class extends Component{
 
     onInputKeyDown(e) {
         if(e.keyCode === 8 && e.target.value.length === 0) {
-            this.props.selected.pop();
+            //this.props.selected.pop();
         }
     }
 

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>DOZ - COMPONENT</title>
     <script src="https://unpkg.com/doz/dist/doz.js"></script>
-    <script src="bundle.js"></script>
+    <script src="bundle.js?1"></script>
     <style>
         body {
             font-family: sans-serif;
@@ -33,7 +33,11 @@
         },
         template(h) {
             return h`
-                <div>Insert some text or select an item from list.<br>For exit press enter.</div>
+                <div>
+                Insert some text or select an item from list.<br>
+                For exit press enter.<br>
+                Type zero or one.<br><br>
+                </div>
                 <doz-combo d:store="boundList"/>
             `
         },
