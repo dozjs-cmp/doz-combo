@@ -1,6 +1,6 @@
 {
     "name": "doz-combo",
-    "version": "0.1.2",
+    "version": "1.0.0",
     "description": "Combo list component for DOZ",
     "main": "dist/bundle.js",
     "scripts": {
